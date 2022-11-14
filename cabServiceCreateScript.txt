@@ -1,0 +1,56 @@
+
+CREATE TABLE IF NOT EXISTS public.cardriver
+(
+    name character varying(15) COLLATE pg_catalog."default",
+    username character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    phone character varying(10) COLLATE pg_catalog."default",
+    email_id character varying(20) COLLATE pg_catalog."default",
+    vehicle_num character varying(10) COLLATE pg_catalog."default",
+    CONSTRAINT cardriver_pkey PRIMARY KEY (username)
+)
+
+CREATE TABLE IF NOT EXISTS public.ongoingride
+(
+    username_driver character varying(20) COLLATE pg_catalog."default",
+    username_users character varying(20) COLLATE pg_catalog."default",
+    start_location character varying(10) COLLATE pg_catalog."default",
+    end_location character varying(10) COLLATE pg_catalog."default",
+    status character varying(1) COLLATE pg_catalog."default",
+    CONSTRAINT ongoingride_username_driver_fkey FOREIGN KEY (username_driver)
+        REFERENCES public.cardriver (username) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT ongoingride_username_users_fkey FOREIGN KEY (username_users)
+        REFERENCES public.users (username) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+CREATE TABLE IF NOT EXISTS public.users
+(
+    name character varying(15) COLLATE pg_catalog."default",
+    username character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    phone character varying(10) COLLATE pg_catalog."default",
+    email_id character varying(20) COLLATE pg_catalog."default",
+    CONSTRAINT users_pkey PRIMARY KEY (username)
+)
+
+CREATE TABLE IF NOT EXISTS public.waitlist_cab
+(
+    username character varying(20) COLLATE pg_catalog."default",
+    present_location character varying(10) COLLATE pg_catalog."default",
+    CONSTRAINT waitlist_cab_username_fkey FOREIGN KEY (username)
+        REFERENCES public.cardriver (username) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+CREATE TABLE IF NOT EXISTS public.waitlist_user
+(
+    username character varying(20) COLLATE pg_catalog."default",
+    present_location character varying(10) COLLATE pg_catalog."default",
+    CONSTRAINT waitlist_user_username_fkey FOREIGN KEY (username)
+        REFERENCES public.users (username) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
